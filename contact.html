@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Contact — VÖRN</title>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:70vh}
+.contact-left{background:var(--bg2);padding:5rem 5vw;border-right:1px solid var(--border)}
+.contact-right{background:var(--bg);padding:5rem 5vw}
+.contact-info{margin-top:3rem}
+.ci-block{padding:2rem 0;border-bottom:1px solid var(--border)}
+.ci-block:last-child{border-bottom:none}
+.ci-lbl{font-size:.55rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:.6rem}
+.ci-val{font-size:.88rem;color:var(--off);line-height:1.9}
+.ci-val a{color:var(--off);transition:color .2s}
+.ci-val a:hover{color:var(--accent)}
+/* FORM */
+.c-form{display:flex;flex-direction:column;gap:1.4rem}
+.fg{display:flex;flex-direction:column;gap:.45rem}
+.fg label{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.fg input,.fg select,.fg textarea{background:rgba(255,255,255,.03);border:1px solid var(--border);color:var(--white);font-family:'DM Sans',sans-serif;font-size:.82rem;padding:.8rem 1rem;outline:none;transition:border-color .2s;font-weight:300;width:100%}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--accent)}
+.fg select option{background:var(--bg2)}
+.fg textarea{resize:none;height:130px;line-height:1.7}
+.c-submit{background:var(--white);color:var(--bg);border:none;width:100%;padding:1.1rem;font-family:'DM Sans',sans-serif;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:background .2s;font-weight:400}
+.c-submit:hover{background:var(--accent)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+/* MAP PLACEHOLDER */
+.map-block{background:var(--surface);border:1px solid var(--border);height:220px;display:flex;align-items:center;justify-content:center;margin-top:2rem;position:relative;overflow:hidden}
+.map-block::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(200,169,106,.05),transparent)}
+.map-glyph{font-family:'Bebas Neue',sans-serif;font-size:4rem;color:rgba(255,255,255,.04)}
+.map-pin{position:absolute;font-size:1.5rem}
+/* FAQ */
+.faq-section{padding:5rem 5vw;background:var(--bg3)}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:3rem}
+.faq-item{background:var(--surface);border:1px solid var(--border);padding:1.8rem;transition:border-color .25s}
+.faq-item:hover{border-color:var(--accent2)}
+.faq-q{font-size:.82rem;color:var(--white);margin-bottom:.6rem;font-weight:400;line-height:1.5}
+.faq-a{font-size:.75rem;color:var(--muted);line-height:1.8}
+@media(max-width:860px){.contact-layout{grid-template-columns:1fr}.faq-grid{grid-template-columns:1fr}}
+@media(max-width:500px){.form-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="topbar">Free shipping on orders over ₹6,000 &nbsp;·&nbsp; AW25 Collection — Now Live</div>
+<nav>
+  <a class="nav-logo" href="index.html">VÖ<span>RN</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li>
+    <li><a href="lookbook.html">Lookbook</a></li><li><a href="about.html">About</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="wishlist.html" class="nav-btn"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></a>
+    <div class="cart-wrap"><a href="cart.html" class="nav-btn"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></a><span class="cart-badge" id="cartBadge">0</span></div>
+    <button class="ham" id="hamBtn"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mob-nav" id="mobNav"><button class="mob-cls" id="mobCls">✕</button><a href="index.html">Home</a><a href="shop.html">Shop</a><a href="about.html">About</a><a href="cart.html">Cart</a></div>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span style="color:var(--white)">Contact</span></div>
+  <div class="s-label">Get in Touch</div>
+  <h1 class="s-title">CONTACT <span class="em">Us</span></h1>
+</div>
+
+<div class="contact-layout">
+  <div class="contact-left">
+    <div class="s-label">Where We Are</div>
+    <h2 class="s-title" style="font-size:2.5rem">FIND <span class="em">Us</span></h2>
+    <div class="contact-info">
+      <div class="ci-block">
+        <div class="ci-lbl">Mumbai Flagship</div>
+        <div class="ci-val">14 Linking Road, Bandra West<br>Mumbai, Maharashtra 400050<br><br>Monday – Saturday: 11AM – 8PM<br>Sunday: 12PM – 6PM</div>
+      </div>
+      <div class="ci-block">
+        <div class="ci-lbl">London Studio (By Appointment)</div>
+        <div class="ci-val">22 Savile Row, Mayfair<br>London, W1S 3PR, United Kingdom</div>
+      </div>
+      <div class="ci-block">
+        <div class="ci-lbl">Email</div>
+        <div class="ci-val"><a href="mailto:hello@vorn.co">hello@vorn.co</a><br><a href="mailto:press@vorn.co">press@vorn.co</a><br><a href="mailto:alterations@vorn.co">alterations@vorn.co</a></div>
+      </div>
+      <div class="ci-block">
+        <div class="ci-lbl">Phone</div>
+        <div class="ci-val"><a href="tel:+912240008000">+91 22 4000 8000</a><br>Mon – Sat, 10AM – 7PM IST</div>
+      </div>
+      <div class="ci-block">
+        <div class="ci-lbl">Social</div>
+        <div class="ci-val" style="display:flex;gap:1.2rem;flex-wrap:wrap">
+          <a href="#" style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:.2rem;transition:color .2s,border-color .2s">Instagram</a>
+          <a href="#" style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:.2rem;transition:color .2s,border-color .2s">Pinterest</a>
+          <a href="#" style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:.2rem;transition:color .2s,border-color .2s">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+    <div class="map-block">
+      <div class="map-glyph">Bandra, Mumbai</div>
+      <div class="map-pin">📍</div>
+    </div>
+  </div>
+
+  <div class="contact-right">
+    <div class="s-label">Write to Us</div>
+    <h2 class="s-title" style="font-size:2.5rem;margin-bottom:2rem">SEND A <span class="em">Message</span></h2>
+    <form class="c-form" id="contactForm" onsubmit="sendMsg(event)">
+      <div class="form-row">
+        <div class="fg"><label>First Name</label><input type="text" placeholder="Aryan" required/></div>
+        <div class="fg"><label>Last Name</label><input type="text" placeholder="Mehta" required/></div>
+      </div>
+      <div class="fg"><label>Email</label><input type="email" placeholder="aryan@email.com" required/></div>
+      <div class="fg"><label>Phone (Optional)</label><input type="tel" placeholder="+91 98000 00000"/></div>
+      <div class="fg">
+        <label>Subject</label>
+        <select required>
+          <option value="">Select a topic</option>
+          <option>Order Enquiry</option>
+          <option>Product Question</option>
+          <option>Returns & Exchanges</option>
+          <option>Alterations & Repairs</option>
+          <option>Custom Commission</option>
+          <option>Wholesale & Press</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="fg"><label>Message</label><textarea placeholder="Tell us how we can help…" required></textarea></div>
+      <button class="c-submit" type="submit">Send Message</button>
+    </form>
+    <div id="formSuccess" style="display:none;background:rgba(200,169,106,.08);border:1px solid rgba(200,169,106,.3);padding:2rem;text-align:center;margin-top:1rem">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--accent);margin-bottom:.5rem">✦</div>
+      <div style="font-size:.85rem;color:var(--off);line-height:1.9">Thank you for your message. A member of our team will respond within 24 hours.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="rv" style="text-align:center">
+    <div class="s-label">Common Questions</div>
+    <h2 class="s-title">FAQ</h2>
+  </div>
+  <div class="faq-grid">
+    <div class="faq-item rv"><div class="faq-q">What is your returns policy?</div><div class="faq-a">We offer 30-day free returns for all unworn items in original packaging. Simply contact us and we'll arrange collection at no charge.</div></div>
+    <div class="faq-item rv d1"><div class="faq-q">Do you offer alterations?</div><div class="faq-a">Yes — free alterations are included on all core collection pieces. Bring your garment to our Mumbai store or ship it to us with your alteration request.</div></div>
+    <div class="faq-item rv"><div class="faq-q">How long does delivery take?</div><div class="faq-a">Standard delivery is 3–5 business days within India. Express delivery (next day in Mumbai and Delhi) available for ₹599. International delivery 5–10 days.</div></div>
+    <div class="faq-item rv d1"><div class="faq-q">Can I order a custom piece?</div><div class="faq-a">Yes, we accept custom commission requests for orders of 2 or more pieces. Lead time is typically 8–10 weeks. Contact us at alterations@vorn.co to begin.</div></div>
+    <div class="faq-item rv"><div class="faq-q">What sizes do you stock?</div><div class="faq-a">We stock XS through XXL in most pieces. Trouser waists from 28 to 38. We also offer made-to-measure on select styles — ask in store or by email.</div></div>
+    <div class="faq-item rv d1"><div class="faq-q">How do I care for my VÖRN pieces?</div><div class="faq-a">Care instructions vary by garment. Wool and cashmere: dry clean or cold hand-wash. Linen and cotton: machine wash cold, hang to dry. See each product page for specifics.</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div><a class="footer-logo" href="index.html">VÖ<span>RN</span></a><p class="footer-about">Men's luxury fashion built on heritage and craft.</p></div>
+    <div class="footer-col"><h5>Shop</h5><a href="shop.html">All Pieces</a><a href="shop.html?cat=Outerwear">Outerwear</a><a href="shop.html?cat=Shirts">Shirts</a></div>
+    <div class="footer-col"><h5>House</h5><a href="about.html">Our Story</a><a href="lookbook.html">Lookbook</a></div>
+    <div class="footer-col"><h5>Support</h5><a href="contact.html">Contact</a><a href="#">Shipping</a><a href="#">Size Guide</a></div>
+  </div>
+  <div class="footer-bottom"><p class="footer-copy">© 2025 VÖRN.</p><div class="footer-social"><a href="#">Instagram</a><a href="#">Pinterest</a></div></div>
+</footer>
+<div class="toast" id="toast"></div>
+<script src="shared.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',initNav);
+function sendMsg(e){
+  e.preventDefault();
+  document.getElementById('contactForm').style.display='none';
+  document.getElementById('formSuccess').style.display='block';
+  showToast('Message sent successfully ✓','success');
+}
+</script>
+</body>
+</html>
