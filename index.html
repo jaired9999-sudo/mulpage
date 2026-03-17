@@ -1,1 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MAISON NOIR — Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* PASTE ALL CSS FROM ORIGINAL CODE HERE */
+    :root { --black: #0a0a0a; --white: #f5f0eb; --cream: #e8e0d5; --gold: #c9a96e; --muted: #8a7f75; --dark: #1a1714; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--black); color: var(--white); font-family: 'Montserrat', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+    /* ... (Include all other styles: .cursor, nav, .hero, .reveal, etc.) */
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="toast" id="toast">Added to bag ✓</div>
 
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">Maison <span>Noir</span></a>
+    <ul class="nav-links">
+      <li><a href="collection.html">Collection</a></li>
+      <li><a href="editorial.html">Editorial</a></li>
+      <li><a href="contact.html">Support</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-icon">&#128269;</button>
+      <button class="nav-icon" onclick="showToast('Cart opened')">&#128717;<span class="cart-badge">2</span></button>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-tag">SS 2026 Collection</p>
+      <h1 class="hero-title">Where<br><em>Silence</em><br>Speaks</h1>
+      <div class="hero-cta">
+        <a href="collection.html" class="btn-primary">Shop The Edit</a>
+        <a href="editorial.html" class="btn-ghost">Our Story</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <img class="hero-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=85&auto=format" alt="Hero" />
+    </div>
+  </section>
+
+  <script>/* PASTE ALL JS FROM ORIGINAL CODE HERE */</script>
+</body>
+</html>
