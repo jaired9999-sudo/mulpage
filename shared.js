@@ -23,6 +23,9 @@ function addToCart(id,size,qty=1){
   const ex=cart.find(i=>i.k===k);
   if(ex)ex.qty+=qty;else cart.push({k,id,name:p.name,price:p.price,size,e:p.e,qty,cat:p.cat});
   saveCart(cart);updateCartBadge();
+  // pop animation
+  const badge=document.getElementById('cartBadge');
+  if(badge){badge.classList.remove('pop');void badge.offsetWidth;badge.classList.add('pop');setTimeout(()=>badge.classList.remove('pop'),500)}
 }
 function removeFromCart(k){const c=getCart().filter(i=>i.k!==k);saveCart(c);updateCartBadge()}
 function updateQty(k,d){
@@ -63,13 +66,69 @@ function renderStars(n){
 // ── SHARED NAV INIT ──
 function initNav(){
   updateCartBadge();
+
+  // Hamburger
   const ham=document.getElementById('hamBtn');
   const mob=document.getElementById('mobNav');
   const mobCls=document.getElementById('mobCls');
-  if(ham)ham.addEventListener('click',()=>mob.classList.add('open'));
-  if(mobCls)mobCls.addEventListener('click',()=>mob.classList.remove('open'));
-  mob&&mob.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mob.classList.remove('open')));
-  // scroll reveal
-  const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target)}}),{threshold:.1});
-  document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+  if(ham)ham.addEventListener('click',()=>{mob.classList.add('open');ham.classList.add('open');document.body.style.overflow='hidden'});
+  if(mobCls)mobCls.addEventListener('click',()=>{mob.classList.remove('open');ham&&ham.classList.remove('open');document.body.style.overflow=''});
+  mob&&mob.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mob.classList.remove('open');ham&&ham.classList.remove('open');document.body.style.overflow=''}));
+
+  // Scroll: add .scrolled to nav
+  const nav=document.querySelector('nav');
+  if(nav){
+    const onScroll=()=>nav.classList.toggle('scrolled',window.scrollY>40);
+    window.addEventListener('scroll',onScroll,{passive:true});
+    onScroll();
+  }
+
+  // Scroll reveal — supports .rv, .rv-left, .rv-right, .rv-scale
+  const rvObs=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('in');rvObs.unobserve(e.target)}
+  }),{threshold:.1});
+  document.querySelectorAll('.rv,.rv-left,.rv-right,.rv-scale').forEach(el=>rvObs.observe(el));
+
+  // Page transition: smooth fade-out on internal link clicks
+  document.querySelectorAll('a[href]').forEach(a=>{
+    const href=a.getAttribute('href');
+    if(!href||href.startsWith('#')||href.startsWith('http')||href.startsWith('mailto')||href.startsWith('tel'))return;
+    a.addEventListener('click',e=>{
+      e.preventDefault();
+      document.body.style.transition='opacity .22s ease';
+      document.body.style.opacity='0';
+      setTimeout(()=>{location.href=href},210);
+    });
+  });
+
+  // Stat number count-up animation
+  document.querySelectorAll('.sv').forEach(el=>{
+    const raw=el.textContent.trim();
+    const num=parseFloat(raw.replace(/[^0-9.]/g,''));
+    const suffix=raw.replace(/[0-9.]/g,'');
+    if(isNaN(num))return;
+    let triggered=false;
+    const elObs=new IntersectionObserver(([entry])=>{
+      if(!entry.isIntersecting||triggered)return;
+      triggered=true;elObs.disconnect();
+      let startTime=null;const duration=1400;
+      const step=ts=>{
+        if(!startTime)startTime=ts;
+        const p=Math.min((ts-startTime)/duration,1);
+        const ease=1-Math.pow(1-p,3);
+        const cur=Math.round(ease*num*10)/10;
+        el.textContent=(Number.isInteger(num)?Math.round(cur):cur)+suffix;
+        if(p<1)requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    },{threshold:.5});
+    elObs.observe(el);
+  });
+
+  // Fade body in (counterpart to page-out transition)
+  document.body.style.opacity='0';
+  document.body.style.transition='opacity .3s ease';
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{document.body.style.opacity='1'});
+  });
 }
