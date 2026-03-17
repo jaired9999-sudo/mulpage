@@ -1,0 +1,160 @@
+/* --- VARIABLES --- */
+:root {
+  --black: #0a0a0a;
+  --white: #f5f0eb;
+  --cream: #e8e0d5;
+  --gold: #c9a96e;
+  --muted: #8a7f75;
+  --dark: #1a1714;
+}
+
+/* --- BASE STYLES --- */
+*, *::before, *::after { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none; /* Required for custom cursor */
+}
+
+/* --- CUSTOM CURSOR --- */
+.cursor {
+  position: fixed;
+  width: 10px; height: 10px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease, width 0.3s, height 0.3s, background 0.3s;
+  mix-blend-mode: difference;
+}
+
+.cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.18s ease, width 0.3s, height 0.3s, opacity 0.3s;
+  opacity: 0.6;
+}
+
+.cursor.hover { width: 6px; height: 6px; background: var(--white); }
+.cursor-ring.hover { width: 52px; height: 52px; opacity: 0.3; }
+
+/* --- NAVIGATION --- */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 28px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+  transition: background 0.4s, padding 0.4s;
+}
+
+nav.scrolled { background: rgba(10,10,10,0.97); padding: 18px 48px; }
+
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-decoration: none;
+}
+.nav-logo span { color: var(--gold); }
+
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  color: var(--white);
+  text-decoration: none;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  transition: opacity 0.3s, color 0.3s;
+}
+.nav-links a:hover { opacity: 1; color: var(--gold); }
+
+.nav-actions { display: flex; gap: 20px; align-items: center; }
+.nav-icon {
+  background: none; border: none; color: var(--white);
+  font-size: 1.1rem; cursor: none; opacity: 0.75;
+  transition: opacity 0.3s, color 0.3s;
+}
+.nav-icon:hover { opacity: 1; color: var(--gold); }
+
+.cart-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--gold); color: var(--black);
+  border-radius: 50%; width: 18px; height: 18px;
+  font-size: 0.6rem; font-weight: 500;
+  position: relative; top: -8px; left: -8px;
+}
+
+/* --- BUTTONS & UI --- */
+.btn-primary {
+  display: inline-block;
+  padding: 14px 36px;
+  background: var(--gold);
+  color: var(--black);
+  text-decoration: none;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: background 0.3s, transform 0.3s;
+}
+.btn-primary:hover { background: var(--white); transform: translateY(-2px); }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: var(--white); text-decoration: none;
+  font-size: 0.65rem; letter-spacing: 0.2em;
+  text-transform: uppercase; opacity: 0.65;
+  transition: opacity 0.3s;
+}
+.btn-ghost:hover { opacity: 1; }
+
+.toast {
+  position: fixed; bottom: 32px; right: 32px;
+  background: var(--gold); color: var(--black);
+  padding: 14px 24px; font-size: 0.7rem; font-weight: 500;
+  text-transform: uppercase; z-index: 9999;
+  transform: translateY(80px); opacity: 0;
+  transition: transform 0.4s, opacity 0.4s;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* --- SECTIONS --- */
+section { padding: 100px 0; }
+.section-tag { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+.section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 4vw, 3.8rem); font-weight: 300; line-height: 1.1; }
+
+/* --- REVEAL ANIMATIONS --- */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+  nav { padding: 22px 32px; }
+  .nav-links { display: none; }
+}
