@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Your Bag — VÖRN</title>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.cart-layout{display:grid;grid-template-columns:1fr 380px;gap:3px;min-height:60vh;padding:3rem 5vw;background:var(--bg)}
+.cart-items-wrap{}
+.cart-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.cart-h h2{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:.05em}
+.cart-count{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.cart-item{display:grid;grid-template-columns:120px 1fr auto;gap:1.5rem;padding:1.8rem 0;border-bottom:1px solid var(--border);align-items:start}
+.ci-img{aspect-ratio:3/4;background:var(--surface);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:3rem;color:rgba(255,255,255,.07);overflow:hidden;cursor:pointer;transition:opacity .2s}
+.ci-img:hover{opacity:.8}
+.ci-name{font-family:'EB Garamond',serif;font-size:1.2rem;color:var(--white);margin-bottom:.3rem;cursor:pointer;transition:color .2s}
+.ci-name:hover{color:var(--accent)}
+.ci-meta{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.ci-qty{display:flex;align-items:center;border:1px solid var(--border);width:fit-content}
+.cq-btn{width:36px;height:36px;background:none;border:none;color:var(--white);cursor:pointer;font-size:.9rem;transition:background .2s;display:flex;align-items:center;justify-content:center}
+.cq-btn:hover{background:var(--surface)}
+.cq-num{width:36px;text-align:center;font-size:.8rem;color:var(--white)}
+.ci-remove{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:underline;transition:color .2s;display:block;margin-top:.8rem}
+.ci-remove:hover{color:var(--white)}
+.ci-price{font-size:1rem;color:var(--white);font-weight:400;white-space:nowrap;text-align:right}
+.ci-unit{font-size:.65rem;color:var(--muted);margin-top:.2rem;text-align:right}
+/* SUMMARY */
+.cart-summary{background:var(--bg2);padding:2rem;border:1px solid var(--border);position:sticky;top:84px;height:fit-content}
+.cs-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.cs-row{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-bottom:.8rem}
+.cs-row.total{font-size:1rem;color:var(--white);border-top:1px solid var(--border);padding-top:1rem;margin-top:1rem;font-weight:400}
+.promo-wrap{display:flex;gap:.5rem;margin:1.5rem 0}
+.promo-inp{flex:1;background:none;border:1px solid var(--border);color:var(--white);font-family:'DM Sans',sans-serif;font-size:.75rem;padding:.7rem .9rem;outline:none;transition:border-color .2s}
+.promo-inp:focus{border-color:var(--accent)}
+.promo-inp::placeholder{color:var(--muted)}
+.promo-btn{background:var(--surface);border:1px solid var(--border);color:var(--off);font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:.7rem 1rem;cursor:pointer;transition:background .2s,color .2s;white-space:nowrap}
+.promo-btn:hover{background:var(--accent2);color:var(--white)}
+.checkout-btn{width:100%;background:var(--white);color:var(--bg);border:none;padding:1.1rem;font-family:'DM Sans',sans-serif;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:background .2s;margin-top:1.2rem;font-weight:400}
+.checkout-btn:hover{background:var(--accent)}
+.cs-note{font-size:.65rem;color:var(--muted);text-align:center;margin-top:.8rem;line-height:1.7}
+.cs-icons{display:flex;justify-content:center;gap:1.5rem;margin-top:1rem}
+.cs-icon{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:.4rem}
+/* EMPTY */
+.cart-empty{grid-column:1/-1;text-align:center;padding:6rem 2rem}
+.empty-glyph{font-family:'Bebas Neue',sans-serif;font-size:6rem;color:var(--border);margin-bottom:1.5rem}
+.empty-text{font-size:.85rem;color:var(--muted);line-height:1.9;margin-bottom:2rem}
+/* CHECKOUT MODAL */
+.checkout-overlay{position:fixed;inset:0;background:rgba(8,8,8,.85);z-index:600;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.checkout-overlay.open{display:flex;animation:fIn .3s}
+.checkout-box{background:var(--bg2);width:92vw;max-width:600px;border:1px solid var(--border);padding:3rem;animation:sUp .3s both;max-height:90vh;overflow-y:auto}
+.co-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.06em;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.co-section{margin-bottom:2rem}
+.co-section-lbl{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem}
+.co-form{display:grid;gap:1rem}
+.co-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{display:flex;flex-direction:column;gap:.4rem}
+.form-group label{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.form-group input,.form-group select{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--white);font-family:'DM Sans',sans-serif;font-size:.8rem;padding:.75rem .9rem;outline:none;transition:border-color .2s;font-weight:300}
+.form-group input:focus,.form-group select:focus{border-color:var(--accent)}
+.form-group select option{background:var(--bg2)}
+.co-place-btn{width:100%;background:var(--white);color:var(--bg);border:none;padding:1.1rem;font-family:'DM Sans',sans-serif;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:background .2s;margin-top:1rem;font-weight:400}
+.co-place-btn:hover{background:var(--accent)}
+.co-close{position:absolute;top:1rem;right:1rem;background:none;border:none;cursor:pointer;color:var(--muted);font-size:1.2rem}
+/* SUCCESS */
+.order-success{text-align:center;padding:2rem}
+.success-glyph{font-family:'Bebas Neue',sans-serif;font-size:5rem;color:var(--accent);margin-bottom:1rem}
+.success-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:.06em;margin-bottom:1rem}
+.success-text{font-size:.85rem;color:var(--off);line-height:1.9;margin-bottom:2rem}
+@keyframes sUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@media(max-width:900px){.cart-layout{grid-template-columns:1fr}.cart-summary{position:static}}
+@media(max-width:600px){.cart-item{grid-template-columns:90px 1fr}.ci-price{display:none}.co-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="topbar">Free shipping on orders over ₹6,000 &nbsp;·&nbsp; AW25 Collection — Now Live</div>
+<nav>
+  <a class="nav-logo" href="index.html">VÖ<span>RN</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="lookbook.html">Lookbook</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="wishlist.html" class="nav-btn"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></a>
+    <div class="cart-wrap"><a href="cart.html" class="nav-btn"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></a><span class="cart-badge" id="cartBadge">0</span></div>
+    <button class="ham" id="hamBtn"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mob-nav" id="mobNav"><button class="mob-cls" id="mobCls">✕</button><a href="index.html">Home</a><a href="shop.html">Shop</a><a href="lookbook.html">Lookbook</a><a href="about.html">About</a><a href="cart.html">Cart</a></div>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span style="color:var(--white)">Your Bag</span></div>
+  <div class="s-label">Review</div>
+  <h1 class="s-title">YOUR <span class="em">Bag</span></h1>
+</div>
+
+<div class="cart-layout" id="cartLayout"></div>
+
+<!-- CHECKOUT MODAL -->
+<div class="checkout-overlay" id="coOverlay" onclick="handleCoClick(event)">
+  <div class="checkout-box" id="coBox" style="position:relative">
+    <button class="co-close" onclick="closeCheckout()">✕</button>
+    <div id="coContent"></div>
+  </div>
+</div>
+
+<footer style="margin-top:3rem">
+  <div class="footer-top">
+    <div><a class="footer-logo" href="index.html">VÖ<span>RN</span></a><p class="footer-about">Men's luxury fashion built on heritage and craft.</p></div>
+    <div class="footer-col"><h5>Shop</h5><a href="shop.html">All Pieces</a><a href="shop.html?cat=Outerwear">Outerwear</a><a href="shop.html?cat=Shirts">Shirts</a></div>
+    <div class="footer-col"><h5>House</h5><a href="about.html">Our Story</a><a href="lookbook.html">Lookbook</a></div>
+    <div class="footer-col"><h5>Support</h5><a href="#">Shipping</a><a href="contact.html">Contact</a></div>
+  </div>
+  <div class="footer-bottom"><p class="footer-copy">© 2025 VÖRN.</p></div>
+</footer>
+<div class="toast" id="toast"></div>
+<script src="shared.js"></script>
+<script>
+function renderCart(){
+  const cart=getCart();const layout=document.getElementById('cartLayout');
+  if(!cart.length){
+    layout.innerHTML=`<div class="cart-empty"><div class="empty-glyph">∅</div><p class="empty-text">Your bag is empty.<br>Discover the collection.</p><a href="shop.html" class="btn-fill">Continue Shopping</a></div>`;
+    return;
+  }
+  const sub=getCartTotal();const shipping=sub>=6000?0:599;const total=sub+shipping;
+  const itemsHTML=cart.map(item=>`
+    <div class="cart-item">
+      <div class="ci-img" onclick="location.href='product.html?id=${item.id}'">${item.e}</div>
+      <div>
+        <div class="ci-name" onclick="location.href='product.html?id=${item.id}'">${item.name}</div>
+        <div class="ci-meta">Size: ${item.size} &nbsp;·&nbsp; VÖRN</div>
+        <div class="ci-qty">
+          <button class="cq-btn" onclick="doQty('${item.k}',-1)">−</button>
+          <span class="cq-num">${item.qty}</span>
+          <button class="cq-btn" onclick="doQty('${item.k}',1)">+</button>
+        </div>
+        <button class="ci-remove" onclick="doRemove('${item.k}')">Remove</button>
+      </div>
+      <div>
+        <div class="ci-price">₹${(item.price*item.qty).toLocaleString('en-IN')}</div>
+        <div class="ci-unit">₹${item.price.toLocaleString('en-IN')} each</div>
+      </div>
+    </div>
+  `).join('');
+  layout.innerHTML=`
+    <div class="cart-items-wrap">
+      <div class="cart-h">
+        <h2>Shopping Bag</h2>
+        <span class="cart-count">${cart.reduce((s,i)=>s+i.qty,0)} Item${cart.reduce((s,i)=>s+i.qty,0)!==1?'s':''}</span>
+      </div>
+      ${itemsHTML}
+      <div style="margin-top:2rem"><a href="shop.html" style="font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:underline;transition:color .2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">← Continue Shopping</a></div>
+    </div>
+    <div class="cart-summary">
+      <div class="cs-title">Order Summary</div>
+      <div class="cs-row"><span>Subtotal (${cart.reduce((s,i)=>s+i.qty,0)} items)</span><span>₹${sub.toLocaleString('en-IN')}</span></div>
+      <div class="cs-row"><span>Shipping</span><span>${shipping===0?'<span style="color:var(--green)">Complimentary</span>':'₹'+shipping}</span></div>
+      <div class="cs-row" style="font-size:.65rem;color:var(--accent)"><span>AW25 Member Savings</span><span>Included</span></div>
+      <div class="cs-row total"><span>Total</span><span>₹${total.toLocaleString('en-IN')}</span></div>
+      <div class="promo-wrap">
+        <input class="promo-inp" id="promoInp" type="text" placeholder="Promo code"/>
+        <button class="promo-btn" onclick="applyPromo()">Apply</button>
+      </div>
+      <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout</button>
+      <p class="cs-note">Secure checkout · Free returns · Complimentary gift wrap</p>
+      <div class="cs-icons">
+        <span class="cs-icon">🔒 Secure</span>
+        <span class="cs-icon">↩ Free Returns</span>
+        <span class="cs-icon">🎁 Gift Wrap</span>
+      </div>
+    </div>
+  `;
+}
+function doQty(k,d){updateQty(k,d);renderCart()}
+function doRemove(k){removeFromCart(k);renderCart();showToast('Item removed')}
+function applyPromo(){const v=document.getElementById('promoInp').value.trim().toUpperCase();if(v==='VORN10')showToast('10% discount applied! ✓','success');else if(v)showToast('Invalid promo code');else showToast('Enter a promo code')}
+function openCheckout(){
+  const cart=getCart();if(!cart.length)return;
+  const total=getCartTotal();
+  document.getElementById('coContent').innerHTML=`
+    <div class="co-title">Checkout</div>
+    <div class="co-section">
+      <div class="co-section-lbl">Personal Details</div>
+      <div class="co-form">
+        <div class="co-row">
+          <div class="form-group"><label>First Name</label><input type="text" placeholder="Aryan" required/></div>
+          <div class="form-group"><label>Last Name</label><input type="text" placeholder="Mehta" required/></div>
+        </div>
+        <div class="form-group"><label>Email</label><input type="email" placeholder="aryan@email.com" required/></div>
+        <div class="form-group"><label>Phone</label><input type="tel" placeholder="+91 98000 00000" required/></div>
+      </div>
+    </div>
+    <div class="co-section">
+      <div class="co-section-lbl">Shipping Address</div>
+      <div class="co-form">
+        <div class="form-group"><label>Address Line 1</label><input type="text" placeholder="123 Marine Drive" required/></div>
+        <div class="form-group"><label>Address Line 2</label><input type="text" placeholder="Apartment, floor (optional)"/></div>
+        <div class="co-row">
+          <div class="form-group"><label>City</label><input type="text" placeholder="Mumbai" required/></div>
+          <div class="form-group"><label>PIN Code</label><input type="text" placeholder="400001" required/></div>
+        </div>
+        <div class="form-group"><label>State</label>
+          <select><option>Maharashtra</option><option>Delhi</option><option>Karnataka</option><option>Tamil Nadu</option><option>Telangana</option><option>Gujarat</option><option>Rajasthan</option><option>West Bengal</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="co-section">
+      <div class="co-section-lbl">Payment</div>
+      <div class="co-form">
+        <div class="form-group"><label>Card Number</label><input type="text" placeholder="4242 4242 4242 4242" maxlength="19"/></div>
+        <div class="co-row">
+          <div class="form-group"><label>Expiry</label><input type="text" placeholder="MM / YY" maxlength="7"/></div>
+          <div class="form-group"><label>CVV</label><input type="text" placeholder="123" maxlength="4"/></div>
+        </div>
+        <div class="form-group"><label>Name on Card</label><input type="text" placeholder="Aryan Mehta"/></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);padding:1rem;font-size:.75rem;color:var(--muted);margin-top:1rem">
+      <strong style="color:var(--white);display:block;margin-bottom:.4rem">Order Total: ₹${total.toLocaleString('en-IN')}</strong>
+      ${cart.length} item${cart.length!==1?'s':''} · Complimentary shipping
+    </div>
+    <button class="co-place-btn" onclick="placeOrder()">Place Order — ₹${total.toLocaleString('en-IN')}</button>
+  `;
+  document.getElementById('coOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCheckout(){document.getElementById('coOverlay').classList.remove('open');document.body.style.overflow=''}
+function handleCoClick(e){if(e.target===document.getElementById('coOverlay'))closeCheckout()}
+function placeOrder(){
+  saveCart([]);
+  document.getElementById('coContent').innerHTML=`
+    <div class="order-success">
+      <div class="success-glyph">✦</div>
+      <div class="success-title">Order Confirmed</div>
+      <p class="success-text">Thank you for your order. Your VÖRN pieces are being prepared with care in our atelier. You will receive a confirmation email shortly.<br><br><strong>Order #VRN-${Date.now().toString().slice(-6)}</strong></p>
+      <a href="shop.html" class="btn-fill" onclick="closeCheckout()">Continue Shopping</a>
+    </div>
+  `;
+  updateCartBadge();
+  renderCart();
+}
+document.addEventListener('DOMContentLoaded',()=>{initNav();renderCart()});
+</script>
+</body>
+</html>
