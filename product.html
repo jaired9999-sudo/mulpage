@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Product — VÖRN</title>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.pd-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:80vh}
+.pd-gallery{background:var(--bg2);position:sticky;top:64px;height:calc(100vh - 64px);display:flex;flex-direction:column;gap:3px;padding:2rem}
+.pd-main-img{flex:1;background:var(--surface);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:10rem;color:rgba(255,255,255,.06);position:relative;overflow:hidden}
+.pd-main-img::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(200,169,106,.05),transparent)}
+.pd-thumbs{display:flex;gap:3px;height:90px}
+.pd-thumb{flex:1;background:var(--surface);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:2rem;color:rgba(255,255,255,.05);cursor:pointer;border:2px solid transparent;transition:border-color .2s}
+.pd-thumb.active{border-color:var(--accent)}
+.pd-thumb:hover{border-color:var(--border)}
+.pd-info{padding:3rem 3.5rem;overflow-y:auto}
+.pd-brand{font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.pd-cat{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem}
+.pd-name{font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:.04em;line-height:.95;margin-bottom:1.5rem;color:var(--white)}
+.pd-price-row{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.5rem}
+.pd-price{font-size:1.8rem;color:var(--white);font-weight:300}
+.pd-old{font-size:1.3rem;color:var(--muted);text-decoration:line-through}
+.pd-rating{display:flex;align-items:center;gap:.8rem;margin-bottom:1.8rem;padding-bottom:1.8rem;border-bottom:1px solid var(--border)}
+.pd-review-count{font-size:.7rem;color:var(--muted);letter-spacing:.1em}
+.pd-desc{font-size:.85rem;line-height:1.95;color:var(--off);margin-bottom:2rem}
+.pd-section{margin-bottom:1.8rem}
+.pd-section-lbl{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem;font-weight:500}
+.sizes-wrap{display:flex;gap:.5rem;flex-wrap:wrap}
+.size-btn{min-width:48px;height:44px;padding:0 .8rem;background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.72rem;cursor:pointer;transition:all .2s}
+.size-btn.active,.size-btn:hover{background:var(--white);color:var(--bg);border-color:var(--white)}
+.colors-wrap{display:flex;gap:.7rem}
+.color-swatch{width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;outline:2px solid transparent;outline-offset:3px;transition:outline .2s}
+.color-swatch.active{outline-color:var(--accent)}
+.pd-actions{display:flex;gap:.8rem;margin-top:2rem}
+.pd-add{flex:1;background:var(--white);color:var(--bg);border:none;padding:1.1rem;font-family:'DM Sans',sans-serif;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:background .2s;font-weight:400}
+.pd-add:hover{background:var(--accent)}
+.pd-add.done{background:var(--accent)}
+.pd-wish{width:52px;height:52px;background:none;border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--off);transition:background .2s,color .2s,border-color .2s}
+.pd-wish:hover,.pd-wish.wished{border-color:var(--accent);color:var(--accent)}
+.pd-wish.wished svg{fill:var(--accent);stroke:var(--accent)}
+.pd-meta{margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.pd-meta-item{}
+.pd-meta-lbl{font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.pd-meta-val{font-size:.8rem;color:var(--off)}
+.pd-tabs{margin-top:2.5rem;border-top:1px solid var(--border);padding-top:2rem}
+.tab-btns{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;padding:.8rem 1.5rem .8rem 0;cursor:pointer;transition:color .2s,border-color .2s;font-weight:400;margin-bottom:-1px}
+.tab-btn.active{color:var(--white);border-bottom-color:var(--accent)}
+.tab-panel{display:none;font-size:.82rem;line-height:1.9;color:var(--off)}
+.tab-panel.active{display:block}
+/* RELATED */
+#related{padding:5rem 5vw;background:var(--bg2)}
+.related-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem 1.5rem;margin-top:2.5rem}
+.qty-wrap{display:flex;align-items:center;border:1px solid var(--border)}
+.qty-btn{width:38px;height:38px;background:none;border:none;color:var(--white);cursor:pointer;font-size:1rem;transition:background .2s;display:flex;align-items:center;justify-content:center}
+.qty-btn:hover{background:var(--surface)}
+.qty-num{width:40px;text-align:center;font-size:.8rem;color:var(--white)}
+@media(max-width:900px){.pd-wrap{grid-template-columns:1fr}.pd-gallery{position:static;height:auto}.related-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.pd-info{padding:2rem 1.5rem}.pd-name{font-size:2.2rem}.pd-actions{flex-wrap:wrap}.pd-add{flex:1 0 200px}}
+</style>
+</head>
+<body>
+<div class="topbar">Free shipping on orders over ₹6,000 &nbsp;·&nbsp; AW25 Collection — Now Live</div>
+<nav>
+  <a class="nav-logo" href="index.html">VÖ<span>RN</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="shop.html" class="active">Shop</a></li>
+    <li><a href="lookbook.html">Lookbook</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="wishlist.html" class="nav-btn"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></a>
+    <div class="cart-wrap"><a href="cart.html" class="nav-btn"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></a><span class="cart-badge" id="cartBadge">0</span></div>
+    <button class="ham" id="hamBtn"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mob-nav" id="mobNav"><button class="mob-cls" id="mobCls">✕</button><a href="index.html">Home</a><a href="shop.html">Shop</a><a href="lookbook.html">Lookbook</a><a href="about.html">About</a><a href="cart.html">Cart</a></div>
+
+<div class="page-header" style="padding:2rem 5vw">
+  <div class="breadcrumb" id="breadcrumb"><a href="index.html">Home</a><span>/</span><a href="shop.html">Shop</a><span>/</span><span id="bcName" style="color:var(--white)">Loading…</span></div>
+</div>
+
+<div class="pd-wrap" id="pdWrap">
+  <div class="pd-gallery">
+    <div class="pd-main-img" id="mainImg"></div>
+    <div class="pd-thumbs" id="thumbs"></div>
+  </div>
+  <div class="pd-info" id="pdInfo"></div>
+</div>
+
+<section id="related">
+  <div class="s-label">You May Also Like</div>
+  <h2 class="s-title">RELATED <span class="em">Pieces</span></h2>
+  <div class="related-grid" id="relatedGrid"></div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div><a class="footer-logo" href="index.html">VÖ<span>RN</span></a><p class="footer-about">Men's luxury fashion built on heritage and craft.</p></div>
+    <div class="footer-col"><h5>Shop</h5><a href="shop.html">All Pieces</a><a href="shop.html?cat=Outerwear">Outerwear</a><a href="shop.html?cat=Shirts">Shirts</a></div>
+    <div class="footer-col"><h5>House</h5><a href="about.html">Our Story</a><a href="lookbook.html">Lookbook</a></div>
+    <div class="footer-col"><h5>Support</h5><a href="#">Shipping</a><a href="#">Size Guide</a><a href="contact.html">Contact</a></div>
+  </div>
+  <div class="footer-bottom"><p class="footer-copy">© 2025 VÖRN.</p><div class="footer-social"><a href="#">Instagram</a><a href="#">Pinterest</a></div></div>
+</footer>
+<div class="toast" id="toast"></div>
+<script src="shared.js"></script>
+<script>
+let selSize=null,selColor=0,qty=1;
+document.addEventListener('DOMContentLoaded',()=>{
+  initNav();
+  const id=parseInt(new URLSearchParams(location.search).get('id'))||1;
+  const p=PRODUCTS.find(x=>x.id===id);
+  if(!p){document.getElementById('pdWrap').innerHTML='<div style="padding:4rem;color:var(--muted)">Product not found.</div>';return;}
+  selSize=p.sizes[0];
+  document.title=`${p.name} — VÖRN`;
+  document.getElementById('bcName').textContent=p.name;
+  // Gallery
+  document.getElementById('mainImg').innerHTML=`<span style="position:relative;z-index:1">${p.e}</span>`;
+  document.getElementById('thumbs').innerHTML=Array(4).fill(0).map((_,i)=>`<div class="pd-thumb${i===0?' active':''}" onclick="setThumb(${i},this)">${p.e}</div>`).join('');
+  // Info
+  document.getElementById('pdInfo').innerHTML=`
+    <div class="pd-brand">VÖRN</div>
+    <div class="pd-cat">${p.cat}</div>
+    <h1 class="pd-name">${p.name}</h1>
+    <div class="pd-price-row">
+      <span class="pd-price">₹${p.price.toLocaleString('en-IN')}</span>
+      ${p.oldPrice?`<span class="pd-old">₹${p.oldPrice.toLocaleString('en-IN')}</span>`:''}
+      ${p.badge?`<span class="badge ${p.badge}">${p.badge==='exc'?'Exclusive':p.badge==='new'?'New':'Sale'}</span>`:''}
+    </div>
+    <div class="pd-rating">
+      <div class="stars">${renderStars(p.stars)}</div>
+      <span class="pd-review-count">${p.reviews} reviews</span>
+    </div>
+    <p class="pd-desc">${p.desc}</p>
+    <div class="pd-section">
+      <div class="pd-section-lbl">Colour</div>
+      <div class="colors-wrap">${p.colors.map((c,i)=>`<div class="color-swatch${i===0?' active':''}" style="background:${c}" onclick="selCol(${i},this)"></div>`).join('')}</div>
+    </div>
+    <div class="pd-section">
+      <div class="pd-section-lbl">Size — <span id="selSizeLbl">${selSize}</span></div>
+      <div class="sizes-wrap">${p.sizes.map((s,i)=>`<button class="size-btn${i===0?' active':''}" onclick="selSz('${s}',this)">${s}</button>`).join('')}</div>
+    </div>
+    <div class="pd-section">
+      <div class="pd-section-lbl">Quantity</div>
+      <div class="qty-wrap">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <span class="qty-num" id="qtyNum">1</span>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+      </div>
+    </div>
+    <div class="pd-actions">
+      <button class="pd-add" id="addBtn" onclick="doAdd(${p.id})">Add to Bag</button>
+      <button class="pd-wish ${isWished(p.id)?'wished':''}" id="wishBtn" onclick="doWish(${p.id})">
+        <svg width="16" height="16" fill="${isWished(p.id)?'var(--accent)':'none'}" stroke="${isWished(p.id)?'var(--accent)':'currentColor'}" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+    </div>
+    <a href="cart.html" style="display:block;text-align:center;margin-top:.6rem;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-decoration:underline;transition:color .2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">View Bag →</a>
+    <div class="pd-meta">
+      <div class="pd-meta-item"><div class="pd-meta-lbl">Material</div><div class="pd-meta-val">${p.material}</div></div>
+      <div class="pd-meta-item"><div class="pd-meta-lbl">Made In</div><div class="pd-meta-val">${p.origin}</div></div>
+      <div class="pd-meta-item"><div class="pd-meta-lbl">SKU</div><div class="pd-meta-val">VRN-AW25-00${p.id.toString().padStart(2,'0')}</div></div>
+      <div class="pd-meta-item"><div class="pd-meta-lbl">Category</div><div class="pd-meta-val">${p.cat}</div></div>
+    </div>
+    <div class="pd-tabs">
+      <div class="tab-btns">
+        <button class="tab-btn active" onclick="setTab('details',this)">Details</button>
+        <button class="tab-btn" onclick="setTab('care',this)">Care</button>
+        <button class="tab-btn" onclick="setTab('shipping',this)">Shipping</button>
+      </div>
+      <div class="tab-panel active" id="tab-details">
+        <p>Handcrafted from ${p.material} sourced from ${p.origin}. Each piece undergoes a 14-point quality inspection before leaving our atelier. Comes with a VÖRN authenticity card and garment bag.</p>
+      </div>
+      <div class="tab-panel" id="tab-care">
+        <p>Dry clean recommended. If hand-washing, use cold water (30°C max) with a gentle wool detergent. Lay flat to dry, away from direct heat. Store folded — never hung — to preserve shape. Iron inside out on low heat.</p>
+      </div>
+      <div class="tab-panel" id="tab-shipping">
+        <p>Complimentary shipping on orders over ₹6,000. Standard delivery in 3–5 business days. Express delivery available for ₹599. International shipping to 45+ countries. 30-day free returns for unworn items in original packaging.</p>
+      </div>
+    </div>
+  `;
+  // Related
+  const related=PRODUCTS.filter(x=>x.id!==id&&x.cat===p.cat).slice(0,4);
+  const rg=document.getElementById('relatedGrid');
+  rg.innerHTML=related.map(r=>`
+    <div class="product-card rv" onclick="location.href='product.html?id=${r.id}'">
+      <div class="p-img">
+        <div class="p-placeholder">${r.e}</div>
+        ${r.badge?`<span class="badge ${r.badge} p-badge">${r.badge==='exc'?'Exclusive':r.badge==='new'?'New':'Sale'}</span>`:''}
+        <div class="p-actions" onclick="event.stopPropagation()">
+          <button class="p-add-btn" onclick="addToCart(${r.id},'${r.sizes[0]}');showToast('Added ✓','success')">Add to Bag</button>
+        </div>
+      </div>
+      <div class="p-brand">VÖRN — ${r.cat}</div>
+      <div class="p-name">${r.name}</div>
+      <div class="p-prices"><span class="p-price">₹${r.price.toLocaleString('en-IN')}</span></div>
+      <div class="stars">${renderStars(r.stars)}</div>
+    </div>
+  `).join('');
+  document.querySelectorAll('#relatedGrid .rv').forEach(el=>{const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target)}}),{threshold:.1});obs.observe(el)});
+});
+function setThumb(i,el){document.querySelectorAll('.pd-thumb').forEach(t=>t.classList.remove('active'));el.classList.add('active')}
+function selSz(s,btn){selSize=s;document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const l=document.getElementById('selSizeLbl');if(l)l.textContent=s}
+function selCol(i,el){selColor=i;document.querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('active'));el.classList.add('active')}
+function changeQty(d){qty=Math.max(1,qty+d);const n=document.getElementById('qtyNum');if(n)n.textContent=qty}
+function doAdd(id){addToCart(id,selSize,qty);const btn=document.getElementById('addBtn');btn.textContent='✓ Added to Bag';btn.classList.add('done');setTimeout(()=>{btn.textContent='Add to Bag';btn.classList.remove('done')},2000);showToast('Added to bag ✓','success')}
+function doWish(id){const w=toggleWish(id);const btn=document.getElementById('wishBtn');btn.classList.toggle('wished',w);const svg=btn.querySelector('svg');svg.style.fill=w?'var(--accent)':'none';svg.style.stroke=w?'var(--accent)':'currentColor';showToast(w?'Added to wishlist ♡':'Removed from wishlist')}
+function setTab(id,btn){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active')}
+</script>
+</body>
+</html>
